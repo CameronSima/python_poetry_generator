@@ -4,6 +4,12 @@ import datetime
 import os
 import numbers
 
+DEBUG = False
+
+if DEBUG:
+	FILENAME_PREFIX = '/home/cameron/Projects/python_poetry_generator/texts/'
+else:
+	FILENAME_PREFIX = '/home/cameron/python_poetry_generator/texts/'
 
 def get_book_text(url):
 	count = 0
@@ -179,7 +185,7 @@ def write(request):
 		for author in authors:
 			if request.get(author):
 				count += 1
-				fname = '/home/cameron/Projects/python_poetry_generator/texts/' + author + '.txt'
+				fname =  FILENAME_PREFIX + author + '.txt'
 				with open(fname) as infile:
 					for line in infile:
 						outfile.write(line)

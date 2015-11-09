@@ -10,6 +10,13 @@ import markov
 
 TEMPLATE_PATH.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "views")))
 
+DEGUB = False
+
+if DEBUG:
+    STATIC_ROOT = '/home/cameron/Projects/python_poetry_generator/static'
+else:
+    STATIC_ROOT = '/home/cameron/python_poetry_generator/static'
+
 poem = None
 
 def db_connect():
@@ -23,13 +30,11 @@ def db_connect():
 
 @route('/static/<filename>')
 def server_static(filename):
-    return static_file(filename, root='/home/cameron/Projects/python_poetry_generator/static')
+    return static_file(filename, root=STATIC_ROOT)
 
 @get('/')
 def page():
-    print poem
     return template('mainPage', poem=poem)
-
 
 @post('/')
 def enter_score():
@@ -45,15 +50,18 @@ def enter_score():
     # db.commit()
     # db.close()
 
-@get('/poetry')
-def scores_view():
-    c = db_connect()
-    c.execute('SELECT poem FROM Poems order by written_date DESC')
-    data = c.fetchall()
-    c.close()
+# @get('/poetry')
+# def scores_view():
+#     c = db_connect()
+#     c.execute('SELECT poem FROM Poems order by written_date DESC')
+#     data = c.fetchall()
+#     c.close()
 
-    return template('poetry', data=data)
+#     return template('poetry', data=data)
 
+if DEBUG:
+    run(host='localhost', port=8080, debug=True)
+else:
+    run(server='cherrypy')
 
-run(host='localhost', port=8080, debug=True)
 

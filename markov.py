@@ -169,6 +169,8 @@ class Markov(object):
 
 
 def write(request):
+	if not request:
+		return "Please select at least one poet!"
 	count = 0
 	authors = ['Dickinson', 'Whitman', 'Poe', 'Cummings', 'Bukowski', 'Shakespeare']
 
@@ -182,13 +184,10 @@ def write(request):
 					for line in infile:
 						outfile.write(line)
 
-	
 	markov = Markov(open(f))
 	markov.generate_markov_text()
 	markov.format_poem()
-
-
-	return markov.text
+	return markov.text.capitalize()
 
 
 

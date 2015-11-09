@@ -13,8 +13,10 @@ TEMPLATE_PATH.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 
 DEBUG = False
 
 if DEBUG:
+    URL_PREFIX = '/poetry_generator'
     STATIC_ROOT = '/home/cameron/Projects/python_poetry_generator/static'
 else:
+    URL_PREFIX = ''
     STATIC_ROOT = '/home/cameron/python_poetry_generator/static'
 
 poem = None
@@ -28,15 +30,15 @@ def db_connect():
              written_date timestamp)''')
     return c
 
-@route('/static/<filename>')
+@route(URL_PREFIX + '/static/<filename>')
 def server_static(filename):
     return static_file(filename, root=STATIC_ROOT)
 
-@get('/')
+@get(URL_PREFIX + '/')
 def page():
     return template('mainPage', poem=poem)
 
-@post('/')
+@post(URL_PREFIX + '/')
 def enter_score():
     now = strftime("%Y-%m-%d %H:%M:%S")
     poem = markov.write(request.forms)

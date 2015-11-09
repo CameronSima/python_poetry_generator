@@ -14,7 +14,7 @@
         <h1>Pastiche <small>Generate original poetry</small></h1>
       </div>
                 <div class="panel-heading">Choose Your Inspiration:</div>
-            <form method="post" action='/'>
+            <form method="post" action='/poetry_generator'>
                 <ul class="list-group" id="poets">
                     <li class="list-group-item">
                         Emily Dickinson

@@ -13,10 +13,10 @@ TEMPLATE_PATH.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 
 DEBUG = False
 
 if DEBUG:
-    URL_PREFIX = '/poetry_generator'
+    URL_PREFIX = ''
     STATIC_ROOT = '/home/cameron/Projects/python_poetry_generator/static'
 else:
-    URL_PREFIX = ''
+    URL_PREFIX = '/poetry_generator'
     STATIC_ROOT = '/home/cameron/python_poetry_generator/static'
 
 poem = None

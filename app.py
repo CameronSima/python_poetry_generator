@@ -34,6 +34,11 @@ def db_connect():
 def server_static(filename):
     return static_file(filename, root=STATIC_ROOT)
 
+if not DEBUG:
+    @route('/poetry_generator')
+    def redirect_main():
+        return template('mainPage')
+
 @get(URL_PREFIX + '/')
 def page():
     return template('mainPage', poem=poem)

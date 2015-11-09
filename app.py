@@ -43,7 +43,7 @@ def enter_score():
     now = strftime("%Y-%m-%d %H:%M:%S")
     poem = markov.write(request.forms)
     global poem
-    redirect('/')
+    redirect(URL_PREFIX + '/')
     # db = sqlite3.connect('poems.db')
     # c = db.cursor()
     

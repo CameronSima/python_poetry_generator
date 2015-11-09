@@ -10,7 +10,7 @@ import markov
 
 TEMPLATE_PATH.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "views")))
 
-DEGUB = False
+DEBUG = False
 
 if DEBUG:
     STATIC_ROOT = '/home/cameron/Projects/python_poetry_generator/static'

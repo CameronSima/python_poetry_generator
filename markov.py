@@ -88,25 +88,15 @@ class Markov(object):
 	
 	def __init__(self, open_file):
 		self.cache = {}
-		self.open_file = open_file
-		self.words = self.file_to_words()
+		self.words = open_file.split()
 		self.word_size = len(self.words)
 		self.database()
-		
-	
-	def file_to_words(self):
-		self.open_file.seek(0)
-		data = self.open_file.read()
-		words = data.split()
-		return words
-		
 	
 	def triples(self):
 		""" Generates triples from the given data string. So if our string were
 				"What a lovely day", we'd generate (What, a, lovely) and then
 				(a, lovely, day).
 		"""
-		
 		if len(self.words) < 3:
 			return
 		
@@ -134,66 +124,85 @@ class Markov(object):
 			w1, w2 = w2, random.choice(self.cache[(w1, w2)])
 		gen_words.append(w2)
 		self.text = ' '.join(gen_words)
+		return self.text
 
 	def format_poem(self):
-			period = False
-			puntc = ['.', '?', '!']
-			puncts = [',', '-', ';', ':']
+		# period = False
+		puntc = ['.', '?', '!']
+		puncts = [',', '-', ';', ':']
+		illegal = ['{', '}', '"', '[', ']', '_', ')', '(', '/']
+		illegal_words = ['the', 'The', 'and']
+	
+		# End the poem on the nearest punctuation mark. 
+		# If the poem contains none, add a period to the end.
+		# for x in reversed(range(len(self.text))):
+		# 	if self.text[x] in puntc:
+		# 		self.text = self.text[:x+1]
+		# 		period = True
+		# 		break
+		# if not period and len(self.text.split(' ')) != 2:
+		# 	self.text = self.text + '.'
 
-			# End the poem on the nearest punctuation mark. 
-			# If the poem contains none, add a period to the end.
-			for x in reversed(range(len(self.text))):
-				if self.text[x] in puntc:
-					self.text = self.text[:x+1]
-					period = True
-					break
-			if not period and len(self.text.split(' ')) != 2:
-				self.text = self.text + '.'
-
-			new_poem = ''
+		new_poem = ''
+		try:
 			for x in range(len(self.text)):
-				# Remove parentheses
-				if self.text[x] == ')' or self.text[x] == '(' or isinstance(self.text[x], numbers.Number):
+
+				if x == 0:
+					new_poem += self.text[x].upper()
+
+
+				# Remove bad characters and numbers
+				elif self.text[x] in illegal or isinstance(self.text[x], numbers.Number):
 					pass
 
 				# Capitalize all i pronouns.
-				elif self.text[x-1] == ' ' and self.text[x+1] == ' ' and self.text[x] == 'i':
+				elif len(self.text) > x > 0 and self.text[x-1] == ' ' and self.text[x+1] == ' ' and self.text[x] == 'i':
 					new_poem += self.text[x].upper()
+					print "OK"
 
 				# Capitalize beginning of new sentences.
-				elif self.text[x-2] in puntc and self.text[x-1] == ' ':
+				elif len(self.text) > x > 0 and self.text[x-2] in puntc and self.text[x-1] == ' ':
 					new_poem += self.text[x].upper()
 
 				else:
 					new_poem += self.text[x]
 
-			self.text = new_poem
+			if new_poem.split()[:-1] in illegal_words:
+				new = new_poem.split()
+				new_poem = new[:-1]
 
 			# Don't end a poem on incorrect punctuation.
-			if self.text[:-1] in puncts:
-				self.text = self.text[:-1]
+			if new_poem[:-1] in puncts:
+				print "KK"
+				new_poem = new_poem[:-1]
+			if new_poem[:-1] not in puntc:
+				new_poem += random.choice(puntc)
+
+			self.text = new_poem
+		except:
+			self.text = "Sorry...There was an error. Please try again!"
+
 
 
 def write(request):
 	if not request:
 		return "Please select at least one poet!"
-	count = 0
 	authors = ['Dickinson', 'Whitman', 'Poe', 'Cummings', 'Bukowski', 'Shakespeare']
+	combined_text = ''
 
-	f = str(count) + 'outfile.txt'
-	with open(f, 'w') as outfile:
-		for author in authors:
-			if request.get(author):
-				count += 1
-				fname =  FILENAME_PREFIX + author + '.txt'
-				with open(fname) as infile:
-					for line in infile:
-						outfile.write(line)
+	for author in authors:
+		if request.get(author):
+			fname = FILENAME_PREFIX + author + '.txt'
+			for line in open(fname):
+				combined_text += line
+	
+	markov = Markov(combined_text)
 
-	markov = Markov(open(f))
+	combined_text = ''
 	markov.generate_markov_text()
 	markov.format_poem()
-	return markov.text.capitalize()
+	return markov.text
+	
 
 
 

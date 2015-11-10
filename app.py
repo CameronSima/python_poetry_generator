@@ -10,7 +10,8 @@ import markov
 
 TEMPLATE_PATH.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "views")))
 
-DEBUG = False
+DEBUG = True
+poem = None
 
 if DEBUG:
     URL_PREFIX = ''
@@ -18,8 +19,6 @@ if DEBUG:
 else:
     URL_PREFIX = '/poetry_generator'
     STATIC_ROOT = '/home/cameron/python_poetry_generator/static'
-
-poem = None
 
 def db_connect():
     db = sqlite3.connect('poems.db')
@@ -41,14 +40,19 @@ if not DEBUG:
 
 @get(URL_PREFIX + '/')
 def page():
-    return template('mainPage', poem=poem)
+    try:
+        return template('mainPage', poem=poem)
+    except:
+        return template('mainPage', poem="Oops...Something went wrong. Please try again!")
 
 @post(URL_PREFIX + '/')
 def enter_score():
     now = strftime("%Y-%m-%d %H:%M:%S")
-    poem = markov.write(request.forms)
     global poem
+    poem = markov.write(request.forms)
+
     redirect(URL_PREFIX + '/')
+
     # db = sqlite3.connect('poems.db')
     # c = db.cursor()
     

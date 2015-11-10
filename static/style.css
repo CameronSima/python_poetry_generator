@@ -64,5 +64,13 @@ body {
     margin-left: 50;
     position: absolute;
     display: inline-block;
-
 }
+
+h1 {
+    margin-left: 20;
+}
+
+#compose {
+    width: 400;
+}
+

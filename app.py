@@ -10,7 +10,7 @@ import markov
 
 TEMPLATE_PATH.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "views")))
 
-DEBUG = True
+DEBUG = False
 poem = None
 
 if DEBUG:

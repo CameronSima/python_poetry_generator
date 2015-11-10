@@ -36,7 +36,7 @@ def server_static(filename):
 if not DEBUG:
     @route('/poetry_generator')
     def redirect_main():
-        return template('mainPage', poem=None)
+        redirect('/poetry_generator/')
 
 @get(URL_PREFIX + '/')
 def page():

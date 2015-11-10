@@ -59,11 +59,28 @@ body {
     display: inline-block;
 }
 
-#output {
+/*#output {
     width: 400;
     margin-left: 50;
     position: absolute;
     display: inline-block;
+}*/
+
+#output {
+    width: 550;
+    display: inline-block;
+    float: right;
+    top: 135;
+    position: absolute;
+    left: 500;
+
+}
+
+#comment {
+    font-style: italic;
+    font-family: times new roman;
+    font-size: 30;
+
 }
 
 h1 {

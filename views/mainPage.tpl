@@ -61,6 +61,7 @@
                     <button id="compose" type="submit" value="Submit" class="btn btn-primary">Compose</button>
                 </ul>
         </form>
+            <!-- <p id="output">" {{ poem }} "</p> -->
             <div class="form-group" id="output">
               <label for="comment">Output:</label>
               <textarea class="form-control" rows="5" id="comment">{{ poem }}</textarea>
